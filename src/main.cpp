@@ -64,6 +64,32 @@ void homing()
     delay(5);
   }
 
+  stepperZ.setCurrentPosition(0);  // Set the current position as zero for now
+  stepperZ.setMaxSpeed(20.0);     // Set Max Speed of Stepper (Slower to get better accuracy)
+  stepperZ.setAcceleration(20.0); // Set Acceleration of Stepper
+  startup_homing = 1;
+
+  while (digitalRead(home_switch))
+  {                                  // Make the Motor move CCW until the switch is activated
+    stepperZ.moveTo(startup_homing); // Set the position to move to
+    startup_homing--;                // Decrease by 1 for next move if needed
+    stepperZ.run();                  // Start moving the Motor
+    delay(5);
+  }
+
+  stepperZ.setCurrentPosition(0);  // Set the current position as zero for now
+  stepperZ.setMaxSpeed(20.0);     // Set Max Speed of Stepper (Slower to get better accuracy)
+  stepperZ.setAcceleration(20.0); // Set Acceleration of Stepper
+  startup_homing = 1;
+
+  while (!digitalRead(home_switch))
+  { // Make the Stepper move CW until the switch is deactivated
+    stepperZ.moveTo(startup_homing);
+    stepperZ.run();
+    startup_homing++;
+    delay(5);
+  }
+
   stepperZ.setCurrentPosition(0);
   Serial.println("Homing Completed");
   Serial.println("");
@@ -123,8 +149,8 @@ void loop()
     moved_up = 1;
   }
 
-  stepperZ.setMaxSpeed(2800.0);     // Set Max Speed of Stepper (Faster for regular movements)
-  stepperZ.setAcceleration(2400.0); // Set Acceleration of Stepper
+  stepperZ.setMaxSpeed(60000.0);     // Set Max Speed of Stepper (Faster for regular movements)
+  stepperZ.setAcceleration(60000.0); // Set Acceleration of Stepper
 
   if ((stepperZ.distanceToGo() == 0) && (moved_up == 1))
   {
