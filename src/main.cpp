@@ -19,15 +19,15 @@ int Hub = 200;                 // Used to store the desired Hub in mm
 int ScrewPitch = 20;           // Used to store the screw pitch in mm
 float BeltRatio = 56.0 / 15.0; // Used to store the belt transmission ratio
 int MotorSteps = 800;          // Used to store the steps per revolution
-int StepCount = (Hub / ScrewPitch) * BeltRatio * MotorSteps;
+int StepCount = (Hub / ScrewPitch) * BeltRatio * MotorSteps; // Steps of the Motor for the given Hub
 
 void setup()
 {
 
   Serial.begin(115200);
 
-  stepperZ.setMaxSpeed(400);     // Set Max Speed of Motor
-  stepperZ.setAcceleration(400); // Set Acceleration of Motor
+  stepperZ.setMaxSpeed(100);     // Set Max Speed of Motor
+  stepperZ.setAcceleration(100); // Set Acceleration of Motor
 
   pinMode(ENA, OUTPUT);
   digitalWrite(ENA, LOW);
@@ -68,6 +68,7 @@ void homing()
   Serial.println("Homing Completed");
   Serial.println("");
   homing_finished = 1;
+  delay(2000);
 }
 void down()
 {
@@ -87,17 +88,17 @@ void down()
       Serial.println("");
       moved_down = 1; // Reset move variable
       moved_up = 0;   // Reset move variable
-      delay(5000);
+      delay(2000);
     }
   }
 }
 void up()
 {
-  Serial.print("Moving Stepper back to home position.....");
+  Serial.print("Moving Stepper up.....");
 
   while ((moved_up == 0) && (moved_down == 1))
   {
-    stepperZ.moveTo(0);
+    stepperZ.moveTo(800);
 
     if ((stepperZ.distanceToGo() != 0))
     {
@@ -122,7 +123,7 @@ void loop()
     moved_up = 1;
   }
 
-  stepperZ.setMaxSpeed(2400.0);     // Set Max Speed of Stepper (Faster for regular movements)
+  stepperZ.setMaxSpeed(2800.0);     // Set Max Speed of Stepper (Faster for regular movements)
   stepperZ.setAcceleration(2400.0); // Set Acceleration of Stepper
 
   if ((stepperZ.distanceToGo() == 0) && (moved_up == 1))
