@@ -26,8 +26,8 @@ void setup()
 
   Serial.begin(115200);
 
-  stepperZ.setMaxSpeed(100);     // Set Max Speed of Motor for Homing
-  stepperZ.setAcceleration(100); // Set Acceleration of Motor for Homing
+  stepperZ.setMaxSpeed(100);     // Set Max Speed of Motor at beginning
+  stepperZ.setAcceleration(100); // Set Acceleration of Motor at beginning
 
   pinMode(ENA, OUTPUT);
   digitalWrite(ENA, LOW);
@@ -43,6 +43,7 @@ void homing()
 
   Serial.print("Stepper Motor is Homing........");
 
+  // rough homing
   while (digitalRead(home_switch))
   {                                  // Make the Motor move CCW until the switch is activated
     stepperZ.moveTo(startup_homing); // Set the position to move to
@@ -63,8 +64,8 @@ void homing()
     startup_homing++;
     delay(5);
   }
-
-  stepperZ.setCurrentPosition(0);  // Set the current position as zero for now
+  // precision homing
+  stepperZ.setCurrentPosition(0); // Set the current position as zero for now
   stepperZ.setMaxSpeed(20.0);     // Set Max Speed of Stepper (Slower to get better accuracy)
   stepperZ.setAcceleration(20.0); // Set Acceleration of Stepper
   startup_homing = 1;
@@ -77,7 +78,7 @@ void homing()
     delay(5);
   }
 
-  stepperZ.setCurrentPosition(0);  // Set the current position as zero for now
+  stepperZ.setCurrentPosition(0); // Set the current position as zero for now
   stepperZ.setMaxSpeed(20.0);     // Set Max Speed of Stepper (Slower to get better accuracy)
   stepperZ.setAcceleration(20.0); // Set Acceleration of Stepper
   startup_homing = 1;
@@ -149,15 +150,15 @@ void loop()
     moved_up = 1;
   }
 
-  stepperZ.setMaxSpeed(60000.0);     // Set Max Speed of Stepper (Faster for regular movements)
+  stepperZ.setMaxSpeed(60000.0);     // Set Max Speed of Stepper
   stepperZ.setAcceleration(60000.0); // Set Acceleration of Stepper
 
-  if ((stepperZ.distanceToGo() == 0) && (moved_up == 1))
+  if ((stepperZ.distanceToGo() == 0) && (moved_up == 1)) // check if stepper is at top position and moves down
   {
     down();
   }
 
-  if ((stepperZ.distanceToGo()) == 0 && (moved_down == 1))
+  if ((stepperZ.distanceToGo()) == 0 && (moved_down == 1)) // check if stepper is at bottom position and moves up
   {
     up();
   }
