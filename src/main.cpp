@@ -15,10 +15,10 @@ int moved_up = 1;         // used to check if move is finished
 long startup_homing = -1; // Used to Home the Motor at startup
 
 // Stepper steps calculation
-int Hub = 200;                 // Used to store the desired Hub in mm
-int ScrewPitch = 20;           // Used to store the screw pitch in mm
-float BeltRatio = 56.0 / 15.0; // Used to store the belt transmission ratio
-int MotorSteps = 800;          // Used to store the steps per revolution
+int Hub = 200;                                               // Used to store the desired Hub in mm
+int ScrewPitch = 20;                                         // Used to store the screw pitch in mm
+float BeltRatio = 56.0 / 15.0;                               // Used to store the belt transmission ratio
+int MotorSteps = 800;                                        // Used to store the steps per revolution
 int StepCount = (Hub / ScrewPitch) * BeltRatio * MotorSteps; // Steps of the Motor for the given Hub
 
 void setup()
@@ -26,8 +26,8 @@ void setup()
 
   Serial.begin(115200);
 
-  stepperZ.setMaxSpeed(100);     // Set Max Speed of Motor
-  stepperZ.setAcceleration(100); // Set Acceleration of Motor
+  stepperZ.setMaxSpeed(100);     // Set Max Speed of Motor for Homing
+  stepperZ.setAcceleration(100); // Set Acceleration of Motor for Homing
 
   pinMode(ENA, OUTPUT);
   digitalWrite(ENA, LOW);
